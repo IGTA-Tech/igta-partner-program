@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 const notebooks = [
   {
@@ -69,14 +69,13 @@ const notebooks = [
 ];
 
 export default function TrainingPage() {
-  const [completedModules, setCompletedModules] = useState<number[]>([]);
-
-  useEffect(() => {
-    const saved = localStorage.getItem('igta-partner-training-progress');
-    if (saved) {
-      setCompletedModules(JSON.parse(saved));
+  const [completedModules, setCompletedModules] = useState<number[]>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('igta-partner-training-progress');
+      return saved ? JSON.parse(saved) : [];
     }
-  }, []);
+    return [];
+  });
 
   const toggleModule = (moduleId: number) => {
     const newCompleted = completedModules.includes(moduleId)
